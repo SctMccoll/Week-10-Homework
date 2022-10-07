@@ -8,7 +8,7 @@
   },
   "params": [
     {
-      "name": "year",
+      "name": "year_slider",
       "value": 2019,
       "bind": {
         "input": "range",
@@ -89,7 +89,7 @@
             "fields": [ "properties", "type", "geometry" ]
           }
         },
-        { "filter": "datum.YEAR==year" },
+        { "filter": "datum.YEAR==year_slider" },
         {
           "calculate": "if(datum.PC_DEP!=null,max(datum.PC_DEP/100,-1),null)",
           "as": "Energy Dependence"

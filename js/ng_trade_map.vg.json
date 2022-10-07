@@ -1,6 +1,6 @@
 {
-  "height": 800,
-  "width": 1200,
+  "width": 600,
+  "height": 500,
 
   "projection": {
     "type": "conicEqualArea",
@@ -17,6 +17,20 @@
     }
   },
 
+  "params": [
+    {
+      "name": "year_slider",
+      "value": 2019,
+      "bind": {
+        "input": "range",
+        "min": 1990,
+        "max": 2020,
+        "step": 1,
+        "name": "Select the year:"
+      }
+    }
+  ],
+
   "layer": [
     {
       "data": {
@@ -32,17 +46,24 @@
           "as": "note"
         }
       ],
-      "projection": {
-        "type": "conicEqualArea",
-        "center": [ 15, 51 ],
-        "parallels": [ 40, 65 ],
-        "scale": 860
-      },
+
+      "params": [
+        {
+          "name": "select_country",
+          "select": {
+            "type": "point",
+            "on": "mouseover",
+            "fields": [ "datum.properties.NAME" ]
+          }
+        }
+      ],
+
       "mark": {
         "type": "geoshape",
         "fill": "lightgray",
         "stroke": "white"
       },
+
       "encoding": {
         "tooltip": {
           "field": "note"
@@ -51,30 +72,58 @@
     },
     {
       "data": {
-        "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/Data/Country_centers.csv"
+        "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/Data/Natural_gas_imports.csv"
       },
 
-      "mark": "circle",
-      "tooltip": [
+      "transform": [
+        { "filter": "datum.from=='TOTAL'" },
+        { "filter": "datum.year==year_slider" },
         {
-          "text": "country"
+          "lookup": "to",
+          "from": {
+            "data": {
+              "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/Data/Country_centers.csv"
+            },
+            "key": "country",
+            "fields": [ "latitude", "longitude" ]
+          },
+          "as": [ "latitude", "longitude" ]
         }
       ],
+
+
+
+      "mark": "circle",
       "encoding": {
+        "size": {
+          "legend": null,
+          "field": "value",
+          "type": "quantitative",
+          "scale": {
+            "domain": [ 0, 5000000 ],
+            "range": [ 0, 3000 ]
+          }
+        },
         "latitude": {
           "field": "latitude"
         },
         "longitude": {
           "field": "longitude"
-        },
-
-        "size": { "value": 1000 }
-      },
-      "config": {
-        "view": {
-          "stroke": "transparent"
         }
-      }
+      },
+      "tooltip": [
+        {
+          "field": "to",
+          "type": "nominal",
+          "title": "Country"
+        },
+        {
+          "field": "value",
+          "type": "quantitative",
+          "format": ".1%",
+          "title": "Dependence"
+        }
+      ]
     },
     {
 
@@ -83,8 +132,14 @@
       },
 
       "transform": [
-        { "filter": "datum.to=='DEU'" },
-        { "filter": "datum.year==2000" },
+        {
+          "filter": {
+            "param": "select_country",
+            "empty": false
+          }
+        },
+        { "filter": "datum.from!='TOTAL'" },
+        { "filter": "datum.year==year_slider" },
         {
           "lookup": "from",
           "from": {
@@ -108,8 +163,14 @@
           "as": [ "dest_latitude", "dest_longitude" ]
         }
       ],
+
       "mark": "rule",
       "encoding": {
+        "strokeWidth": {
+          "field": "value",
+          "legend": null,
+          "scale": { "range": [ 1, 5 ] }
+        },
         "longitude": {
           "field": "origin_longitude",
           "type": "quantitative"
