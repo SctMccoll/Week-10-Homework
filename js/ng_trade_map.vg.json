@@ -4,9 +4,9 @@
 
   "projection": {
     "type": "conicEqualArea",
-    "center": [ 15, 51 ],
+    "center": [ 20, 51 ],
     "parallels": [ 40, 65 ],
-    "scale": 860
+    "scale": 700
   },
 
   "data": {
@@ -42,8 +42,15 @@
       },
       "transform": [
         {
-          "calculate": "'Data is not available in ' + datum.properties.NAME",
-          "as": "note"
+          "lookup": "properties.ADM0_A3_BR",
+          "from": {
+            "data": {
+              "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/Data/Country_centers.csv"
+            },
+            "key": "country",
+            "fields": [ "country" ]
+          },
+          "as": [ "to" ]
         }
       ],
 
@@ -52,8 +59,7 @@
           "name": "select_country",
           "select": {
             "type": "point",
-            "on": "mouseover",
-            "fields": [ "datum.properties.NAME" ]
+            "fields": [ "to" ]
           }
         }
       ],
@@ -65,9 +71,19 @@
       },
 
       "encoding": {
-        "tooltip": {
-          "field": "note"
-        }
+        "tooltip": [
+          {
+            "field": "properties.NAME",
+            "type": "nominal",
+            "title": "Country"
+          },
+          {
+            "field": "value",
+            "type": "quantitative",
+            "format": ".2s",
+            "title": "Total Natural Gas Imports (TJ)"
+          }
+        ]
       }
     },
     {
@@ -110,20 +126,7 @@
         "longitude": {
           "field": "longitude"
         }
-      },
-      "tooltip": [
-        {
-          "field": "to",
-          "type": "nominal",
-          "title": "Country"
-        },
-        {
-          "field": "value",
-          "type": "quantitative",
-          "format": ".1%",
-          "title": "Dependence"
-        }
-      ]
+      }
     },
     {
 
@@ -164,12 +167,17 @@
         }
       ],
 
-      "mark": "rule",
+      "mark": {
+        "type": "rule",
+        "strokeCap": "round",
+        "strokeDash": [ 8, 8 ]
+
+      },
       "encoding": {
         "strokeWidth": {
           "field": "value",
           "legend": null,
-          "scale": { "range": [ 1, 5 ] }
+          "scale": { "range": [ 1, 7 ] }
         },
         "longitude": {
           "field": "origin_longitude",
