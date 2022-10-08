@@ -4,17 +4,9 @@
 
   "projection": {
     "type": "conicEqualArea",
-    "center": [ 20, 51 ],
+    "center": [ 18, 51 ],
     "parallels": [ 40, 65 ],
-    "scale": 650
-  },
-
-  "data": {
-    "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/Data/Natural_gas_imports.csv",
-    "format": {
-      "type": "csv",
-      "parse": "auto"
-    }
+    "scale": 600
   },
 
   "params": [
@@ -40,18 +32,14 @@
           "feature": "ne_50m_admin_0_countries"
         }
       },
-
       "transform": [
         {
-          "lookup": "properties.ADM0_A3_BR",
-          "from": {
-            "data": {
-              "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/Data/Country_centers.csv"
-            },
-            "key": "country",
-            "fields": [ "country" ]
-          },
-          "as": [ "to" ]
+          "calculate": "'Data is not available in ' + datum.properties.NAME",
+          "as": "note"
+        },
+        {
+          "calculate": "datum.properties.ADM0_A3_BR",
+          "as": "to"
         }
       ],
 
@@ -69,22 +57,246 @@
         "type": "geoshape",
         "fill": "lightgray",
         "stroke": "white"
+      }
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/Data/Natural_gas_imports.csv"
+      },
+
+      "transform": [
+        {
+          "filter": {
+            "param": "select_country",
+            "empty": false
+          }
+        },
+        { "filter": "datum.from!='TOTAL'" },
+        { "filter": "datum.year==year_slider" },
+        {
+          "lookup": "from",
+          "from": {
+            "data": {
+              "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/Data/Country_centers.csv"
+            },
+            "key": "country",
+            "fields": [ "latitude", "longitude" ]
+          },
+          "as": [ "origin_latitude", "origin_longitude" ]
+        },
+        {
+          "lookup": "to",
+          "from": {
+            "data": {
+              "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/Data/Country_centers.csv"
+            },
+            "key": "country",
+            "fields": [ "latitude", "longitude" ]
+          },
+          "as": [ "dest_latitude", "dest_longitude" ]
+        }
+      ],
+
+      "mark": {
+        "type": "rule",
+        "strokeCap": "round",
+        "color": "#FDBE4B",
+        "strokeDash": [ 8, 8 ]
       },
 
       "encoding": {
-        "tooltip": [
-          {
-            "field": "properties.NAME",
-            "type": "nominal",
-            "title": "Country"
-          },
-          {
-            "field": "value",
-            "type": "quantitative",
-            "format": ".2s",
-            "title": "Total Natural Gas Imports (TJ)"
+        "strokeWidth": {
+          "field": "value",
+          "legend": null,
+          "scale": {
+            "domain": [ 0, 5000000 ],
+            "range": [ 0, 20 ]
           }
-        ]
+        },
+        "longitude": {
+          "field": "origin_longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "origin_latitude",
+          "type": "quantitative"
+        },
+        "longitude2": { "field": "dest_longitude" },
+        "latitude2": { "field": "dest_latitude" }
+      }
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/Data/Natural_gas_imports.csv"
+      },
+
+      "transform": [
+        { "filter": "datum.from=='TOTAL'" },
+        { "filter": "datum.year==year_slider" }
+      ],
+
+      "mark": {
+        "type": "circle",
+        "color": "#93BDF1",
+        "opacity": 1
+      },
+      "encoding": {
+        "size": {
+          "legend": null,
+          "field": "value",
+          "type": "quantitative",
+          "scale": {
+            "domain": [ 0, 5000000 ],
+            "range": [ 0, 3000 ]
+          }
+        },
+        "latitude": {
+          "field": "to_lat"
+        },
+        "longitude": {
+          "field": "to_lon"
+        }
+      }
+    },
+
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/Data/Natural_gas_imports.csv"
+      },
+
+      "transform": [
+        { "filter": "datum.from=='TOTAL'" },
+        { "filter": "datum.year==year_slider" },
+        {
+          "filter": {
+            "param": "select_country",
+            "empty": false
+          }
+        }
+      ],
+
+      "mark": {
+        "type": "circle",
+        "color": "#FDBE4B",
+        "size": 30,
+        "opacity": 1
+      },
+      "encoding": {
+        "latitude": {
+          "field": "from_lat"
+        },
+        "longitude": {
+          "field": "from_lon"
+        }
+      }
+    },
+
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/Data/Natural_gas_imports.csv"
+      },
+
+      "transform": [
+        { "filter": "datum.from=='TOTAL'" },
+        { "filter": "datum.year==year_slider" },
+        { "filter": "datum.value!=0" },
+        {
+          "filter": {
+            "param": "select_country",
+            "empty": false
+          }
+        },
+        {
+          "calculate": "datum.value + ' TJ'",
+          "as": "note"
+        }
+      ],
+
+      "mark": {
+        "type": "text",
+        "color": "black",
+        "fontWeight": 500
+      },
+      "encoding": {
+        "text": {
+          "field": "value",
+          "type": "nominal",
+          "format": ".3s"
+        },
+        "latitude": {
+          "field": "to_lat"
+        },
+        "longitude": {
+          "field": "to_lon"
+        }
+      }
+
+    },
+
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/Data/Natural_gas_imports.csv"
+      },
+
+      "transform": [
+        { "filter": "datum.from=='TOTAL'" },
+        { "filter": "datum.year==year_slider" },
+        { "filter": "datum.value!=0" },
+        {
+          "filter": {
+            "param": "select_country",
+            "empty": false
+          }
+        },
+        {
+          "calculate": "datum.value + ' TJ'",
+          "as": "note"
+        }
+      ],
+
+      "mark": {
+        "type": "text",
+        "color": "black",
+        "dy": -10,
+        "fontWeight": 900
+      },
+      "encoding": {
+        "text": { "field": "to_name" },
+        "latitude": {
+          "field": "to_lat"
+        },
+        "longitude": {
+          "field": "to_lon"
+        }
+      }
+
+    },
+
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/Data/Natural_gas_imports.csv"
+      },
+
+      "transform": [
+
+        { "filter": "datum.from!='TOTAL'" },
+        { "filter": "datum.year==year_slider" }
+      ],
+
+      "mark": {
+        "type": "text",
+        "color": "black",
+        "baseline": "bottom",
+        "fontWeight": 500
+      },
+      "encoding": {
+        "text": { "field": "from_name" },
+        "latitude": {
+          "field": "from_lat"
+        },
+        "longitude": {
+          "field": "from_lon"
+        }
       }
     },
 
@@ -123,85 +335,25 @@
             "fields": [ "latitude", "longitude" ]
           },
           "as": [ "dest_latitude", "dest_longitude" ]
-        },
-
-        {
-          "calculate": "(datum.dest_longitude - datum.origin_longitude)/(datum.dest_latitude - datum.origin_latitude)",
-          "as": "gradient"
-        },
-        {
-          "calculate": "datum.origin_latitude + 10 / datum.gradient",
-          "as": "real_lat"
-        },
-        {
-          "calculate": "datum.origin_longitude + 10 * datum.gradient",
-          "as": "real_lon"
         }
       ],
 
       "mark": {
-        "type": "rule",
-        "strokeCap": "round",
-        "strokeDash": [ 8, 8 ]
-
+        "type": "text",
+        "color": "black",
+        "baseline": "top",
+        "fontWeight": 500
       },
       "encoding": {
-        "strokeWidth": {
+        "text": {
           "field": "value",
-          "legend": null,
-          "scale": { "range": [ 1, 7 ] }
-        },
-        "longitude": {
-          "field": "origin_longitude",
-          "type": "quantitative"
+          "format": ".3s"
         },
         "latitude": {
-          "field": "origin_latitude",
-          "type": "quantitative"
-        },
-        "longitude2": { "field": "dest_longitude" },
-        "latitude2": { "field": "dest_latitude" }
-      }
-    },
-    {
-      "data": {
-        "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/Data/Natural_gas_imports.csv"
-      },
-
-      "transform": [
-        { "filter": "datum.from=='TOTAL'" },
-        { "filter": "datum.year==year_slider" },
-        {
-          "lookup": "to",
-          "from": {
-            "data": {
-              "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/Data/Country_centers.csv"
-            },
-            "key": "country",
-            "fields": [ "latitude", "longitude" ]
-          },
-          "as": [ "latitude", "longitude" ]
-        }
-      ],
-
-
-
-      "mark": "circle",
-      "encoding": {
-        "size": {
-          "legend": null,
-          "field": "value",
-          "type": "quantitative",
-          "scale": {
-            "domain": [ 0, 5000000 ],
-            "range": [ 0, 3000 ]
-          }
-        },
-        "latitude": {
-          "field": "latitude"
+          "field": "from_lat"
         },
         "longitude": {
-          "field": "longitude"
+          "field": "from_lon"
         }
       }
     }
