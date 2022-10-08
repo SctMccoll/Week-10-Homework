@@ -16,11 +16,15 @@
 <body>
 
     <div id="ng_trade_map"></div>
+    <div id="energy_dependence_map"></div>
 
     <script type="text/javascript">
 
         var spec2 = "js/ng_trade_map.vg.json";
-        vegaEmbed('#ng_trade_map', spec2).then(function (result) {}).catch(console.error);
+        vegaEmbed('#ng_trade_map', spec2).then(function (result) { }).catch(console.error);
+
+        var spec3 = "js/energy_dependence_map.vg.json";
+        vegaEmbed('#energy_dependence_map', spec3).then(function (result) { }).catch(console.error);
     </script>
 
 </body>
