@@ -238,6 +238,7 @@
       "mark": {
         "type": "text",
         "color": "black",
+        "baseline": "top",
         "fontWeight": 500
       },
       "encoding": {
@@ -280,7 +281,7 @@
       "mark": {
         "type": "text",
         "color": "black",
-        "dy": -10,
+        "baseline": "bottom",
         "fontWeight": 900
       },
       "encoding": {
@@ -309,6 +310,7 @@
             "empty": false
           }
         }
+
       ],
 
       "mark": {
