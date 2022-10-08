@@ -34,10 +34,6 @@
       },
       "transform": [
         {
-          "calculate": "'Data is not available in ' + datum.properties.NAME",
-          "as": "note"
-        },
-        {
           "calculate": "datum.properties.ADM0_A3_BR",
           "as": "to"
         }
@@ -72,29 +68,7 @@
           }
         },
         { "filter": "datum.from!='TOTAL'" },
-        { "filter": "datum.year==year_slider" },
-        {
-          "lookup": "from",
-          "from": {
-            "data": {
-              "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/Data/Country_centers.csv"
-            },
-            "key": "country",
-            "fields": [ "latitude", "longitude" ]
-          },
-          "as": [ "origin_latitude", "origin_longitude" ]
-        },
-        {
-          "lookup": "to",
-          "from": {
-            "data": {
-              "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/Data/Country_centers.csv"
-            },
-            "key": "country",
-            "fields": [ "latitude", "longitude" ]
-          },
-          "as": [ "dest_latitude", "dest_longitude" ]
-        }
+        { "filter": "datum.year==year_slider" }
       ],
 
       "mark": {
@@ -108,21 +82,22 @@
         "strokeWidth": {
           "field": "value",
           "legend": null,
+          "type": "quantitative",
           "scale": {
             "domain": [ 0, 5000000 ],
             "range": [ 0, 20 ]
           }
         },
         "longitude": {
-          "field": "origin_longitude",
+          "field": "to_lon",
           "type": "quantitative"
         },
         "latitude": {
-          "field": "origin_latitude",
+          "field": "to_lat",
           "type": "quantitative"
         },
-        "longitude2": { "field": "dest_longitude" },
-        "latitude2": { "field": "dest_latitude" }
+        "longitude2": { "field": "from_lon" },
+        "latitude2": { "field": "from_lat" }
       }
     },
     {
@@ -131,7 +106,7 @@
       },
 
       "transform": [
-        { "filter": "datum.from=='TOTAL'" },
+        { "filter": "datum.from!='TOTAL'" },
         { "filter": "datum.year==year_slider" }
       ],
 
@@ -165,14 +140,14 @@
       },
 
       "transform": [
-        { "filter": "datum.from=='TOTAL'" },
-        { "filter": "datum.year==year_slider" },
         {
           "filter": {
             "param": "select_country",
             "empty": false
           }
-        }
+        },
+        { "filter": "datum.from=='TOTAL'" },
+        { "filter": "datum.year==year_slider" }
       ],
 
       "mark": {
@@ -278,9 +253,14 @@
       },
 
       "transform": [
-
         { "filter": "datum.from!='TOTAL'" },
-        { "filter": "datum.year==year_slider" }
+        { "filter": "datum.year==year_slider" },
+        {
+          "filter": {
+            "param": "select_country",
+            "empty": false
+          }
+        }
       ],
 
       "mark": {
@@ -313,29 +293,7 @@
           }
         },
         { "filter": "datum.from!='TOTAL'" },
-        { "filter": "datum.year==year_slider" },
-        {
-          "lookup": "from",
-          "from": {
-            "data": {
-              "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/Data/Country_centers.csv"
-            },
-            "key": "country",
-            "fields": [ "latitude", "longitude" ]
-          },
-          "as": [ "origin_latitude", "origin_longitude" ]
-        },
-        {
-          "lookup": "to",
-          "from": {
-            "data": {
-              "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/Data/Country_centers.csv"
-            },
-            "key": "country",
-            "fields": [ "latitude", "longitude" ]
-          },
-          "as": [ "dest_latitude", "dest_longitude" ]
-        }
+        { "filter": "datum.year==year_slider" }
       ],
 
       "mark": {
