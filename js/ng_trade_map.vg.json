@@ -1,13 +1,13 @@
 {
   "title": "Natural Gas Imports by Conutry (TJ)",
-  "width": 600,
+  "width": 750,
   "height": 500,
 
   "projection": {
     "type": "conicEqualArea",
-    "center": [ 19, 51 ],
+    "center": [ 18, 47 ],
     "parallels": [ 40, 65 ],
-    "scale": 620
+    "scale": 750
   },
 
   "params": [
@@ -25,6 +25,36 @@
   ],
 
   "layer": [
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/js/EU.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "ne_50m_ocean"
+        }
+      },
+
+      "mark": {
+        "type": "geoshape",
+        "fill": "#E8F0F5"
+      }
+    },
+
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/js/EU.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "ne_50m_graticules_5"
+        }
+      },
+
+      "mark": {
+        "type": "geoshape",
+        "fill": "None",
+        "stroke": "lightgray"
+      }
+    },
 
     {
       "data": {
@@ -36,7 +66,7 @@
       },
       "transform": [
         {
-          "calculate": "'Data is not available in ' + datum.properties.NAME",
+          "calculate": "'Import data is not available in ' + datum.properties.NAME",
           "as": "note"
         }
       ],
@@ -102,7 +132,7 @@
           {
             "field": "value",
             "type": "quantitative",
-            "format": ".2s",
+            "format": ".3s",
             "title": "Total Imports (TJ)"
           }
         ]
@@ -122,7 +152,8 @@
       "mark": {
         "type": "circle",
         "color": "#93BDF1",
-        "opacity": 1
+        "stroke": "white",
+        "opacity": 0.5
       },
       "encoding": {
         "size": {
@@ -206,6 +237,7 @@
       "mark": {
         "type": "circle",
         "color": "#93BDF1",
+        "stroke": "white",
         "opacity": 1
       },
       "encoding": {
@@ -246,6 +278,7 @@
       "mark": {
         "type": "circle",
         "color": "#FDBE4B",
+        "stroke": "white",
         "opacity": 1
       },
       "encoding": {
