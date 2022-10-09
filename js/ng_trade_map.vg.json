@@ -90,6 +90,7 @@
       "transform": [
         { "filter": "datum.from=='TOTAL'" },
         { "filter": "datum.year==year_slider" },
+        { "filter": "datum.value!=0" },
         {
           "lookup": "to",
           "from": {
