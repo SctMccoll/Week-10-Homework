@@ -187,6 +187,7 @@
           }
         },
         { "filter": "datum.from!='TOTAL'" },
+        { "filter": "datum.from!=datum.to" },
         { "filter": "datum.year==year_slider" }
       ],
 
@@ -273,6 +274,7 @@
           }
         },
         { "filter": "datum.from!='TOTAL'" },
+        { "filter": "datum.from!=datum.to" },
         { "filter": "datum.year==year_slider" }
       ],
 
@@ -390,6 +392,7 @@
 
       "transform": [
         { "filter": "datum.from!='TOTAL'" },
+        { "filter": "datum.from!=datum.to" },
         { "filter": "datum.year==year_slider" },
         {
           "filter": {
@@ -430,6 +433,7 @@
           }
         },
         { "filter": "datum.from!='TOTAL'" },
+        { "filter": "datum.from!=datum.to" },
         { "filter": "datum.year==year_slider" }
       ],
 
