@@ -1,11 +1,20 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "title": "EU Energy Import Dependence",
-  "width": 600,
+  "width": 750,
   "height": 500,
+
   "data": {
     "url": "https://raw.githubusercontent.com/SctMccoll/Week-9-Homework/main/Data/Energy_Dependence_Time.csv"
   },
+
+  "projection": {
+    "type": "conicEqualArea",
+    "center": [ 18, 47 ],
+    "parallels": [ 40, 65 ],
+    "scale": 750
+  },
+
   "params": [
     {
       "name": "year",
@@ -19,7 +28,39 @@
       }
     }
   ],
+
   "layer": [
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/js/EU.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "ne_50m_ocean"
+        }
+      },
+
+      "mark": {
+        "type": "geoshape",
+        "fill": "#E8F0F5"
+      }
+    },
+
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/js/EU.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "ne_50m_graticules_5"
+        }
+      },
+
+      "mark": {
+        "type": "geoshape",
+        "fill": "None",
+        "stroke": "lightgray"
+      }
+    },
+
     {
       "data": {
         "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/js/EU.topojson",
@@ -28,12 +69,7 @@
           "feature": "ne_110m_graticules_5"
         }
       },
-      "projection": {
-        "type": "conicEqualArea",
-        "center": [ 15, 51 ],
-        "parallels": [ 40, 65 ],
-        "scale": 860
-      },
+
       "mark": {
         "type": "geoshape",
         "fill": "None",
@@ -42,6 +78,7 @@
       "encoding": {
       }
     },
+
     {
       "data": {
         "url": "https://raw.githubusercontent.com/SctMccoll/Week-10-Homework/main/js/EU.topojson",
@@ -56,12 +93,7 @@
           "as": "note"
         }
       ],
-      "projection": {
-        "type": "conicEqualArea",
-        "center": [ 15, 51 ],
-        "parallels": [ 40, 65 ],
-        "scale": 860
-      },
+
       "mark": {
         "type": "geoshape",
         "fill": "lightgray",
@@ -73,6 +105,7 @@
         }
       }
     },
+
     {
       "transform": [
         {
@@ -100,12 +133,6 @@
         }
       ],
 
-      "projection": {
-        "type": "conicEqualArea",
-        "center": [ 15, 51 ],
-        "parallels": [ 40, 65 ],
-        "scale": 860
-      },
       "mark": {
         "type": "geoshape",
         "stroke": "white"
